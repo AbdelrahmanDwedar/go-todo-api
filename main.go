@@ -45,5 +45,31 @@ func main() {
 		w.Write(jsonBytes)
 	})
 
+	http.HandleFunc("/todo/new", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			w.WriteHeader(http.StatusMethodNotAllowed)
+			return
+		}
+
+		var todoItem TodoItem
+		err := json.NewDecoder(r.Body).Decode(&todoItem)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte("Invalid request payload"))
+			return
+		}
+
+		err = server.store.Post(todoItem)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte("Failed to create todo item"))
+			return
+		}
+
+		w.WriteHeader(http.StatusCreated)
+		w.Header().Add("Content-Type", "application/json")
+		w.Write([]byte("Todo item created"))
+	})
+
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
