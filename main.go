@@ -7,6 +7,11 @@ import (
 )
 
 func main() {
+	router, err := NewRouter()
+	if err != nil {
+		log.Fatalf("Failed to initialize router: %v", err)
+	}
+
 	store, err := NewSqliteStore("database.db")
 	if err != nil {
 		log.Fatalf("Failed to initialize store: %v", err)
@@ -14,13 +19,13 @@ func main() {
 
 	server := NewServer(store)
 
-	http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`{
 			"message": "pong"
 		}`))
 	})
 
-	http.HandleFunc("/todo", func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/todo", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodGet {
 			w.WriteHeader(http.StatusMethodNotAllowed)
 			return
@@ -45,7 +50,7 @@ func main() {
 		w.Write(jsonBytes)
 	})
 
-	http.HandleFunc("/todo/new", func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/todo/new", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
 			w.WriteHeader(http.StatusMethodNotAllowed)
 			return
