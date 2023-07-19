@@ -19,7 +19,7 @@ type Storer interface {
 type SqliteStore struct {
 	client *sql.DB
 	file   string
-	mu     sync.RWMutex
+	mu     *sync.RWMutex
 }
 
 func NewSqliteStore(db string) (*SqliteStore, error) {
@@ -137,16 +137,6 @@ func (store SqliteStore) AddItemToList(listID string, item TodoItem) error {
 	_, err = statement.Exec(listID, item.Title, item.Description)
 
 	return err
-}
-
-type Server struct {
-	store Storer
-}
-
-func NewServer(s Storer) *Server {
-	return &Server{
-		store: s,
-	}
 }
 
 type TodoItem struct {
