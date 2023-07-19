@@ -10,11 +10,9 @@ type Router struct {
 }
 
 func NewRouter() (*Router, error) {
-	router := &Router{
+	return &Router{
 		routes: make(map[string]http.HandlerFunc),
-	}
-
-	return router, nil
+	}, nil
 }
 
 func (r *Router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
