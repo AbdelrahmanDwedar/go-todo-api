@@ -30,7 +30,7 @@ func MakeHandleFunc(f apiFunc) http.HandlerFunc {
 func (s *Server) HandlePing(w http.ResponseWriter, r *http.Request) error {
 	if r.Method != http.MethodGet {
 		w.WriteHeader(http.StatusMethodNotAllowed)
-		return &http.ProtocolError{ErrorString: "Method Not Allowed"}
+		return nil
 	}
 
 	w.Write([]byte(`{
@@ -43,7 +43,7 @@ func (s *Server) HandlePing(w http.ResponseWriter, r *http.Request) error {
 func (s *Server) HandleTodoList(w http.ResponseWriter, r *http.Request) error {
 	if r.Method != http.MethodGet {
 		w.WriteHeader(http.StatusMethodNotAllowed)
-		return &http.ProtocolError{ErrorString: "Method Not Allowed"}
+		return nil
 	}
 
 	todoLists, err := s.store.GetAll()
@@ -69,7 +69,7 @@ func (s *Server) HandleTodoList(w http.ResponseWriter, r *http.Request) error {
 func (s *Server) HandleNewItem(w http.ResponseWriter, r *http.Request) error {
 	if r.Method != http.MethodPost {
 		w.WriteHeader(http.StatusMethodNotAllowed)
-		return &http.ProtocolError{ErrorString: "Method Not Allowed"}
+		return nil
 	}
 
 	var todoItem TodoItem
@@ -96,7 +96,7 @@ func (s *Server) HandleNewItem(w http.ResponseWriter, r *http.Request) error {
 func (s *Server) HandleGetList(w http.ResponseWriter, r *http.Request) error {
 	if r.Method != http.MethodGet {
 		w.WriteHeader(http.StatusMethodNotAllowed)
-		return &http.ProtocolError{ErrorString: "Method Not Allowed"}
+		return nil
 	}
 
 	id := strings.TrimPrefix(r.URL.Path, "/todo/lists/")
@@ -124,7 +124,7 @@ func (s *Server) HandleGetList(w http.ResponseWriter, r *http.Request) error {
 func (s *Server) HandleNewItemInList(w http.ResponseWriter, r *http.Request) error {
 	if r.Method != http.MethodPost {
 		w.WriteHeader(http.StatusMethodNotAllowed)
-		return &http.ProtocolError{ErrorString: "Method Not Allowed"}
+		return nil
 	}
 
 	urlParts := strings.Split(r.URL.Path, "/")
@@ -159,7 +159,7 @@ func (s *Server) HandleNewItemInList(w http.ResponseWriter, r *http.Request) err
 func (s *Server) HandleNewList(w http.ResponseWriter, r *http.Request) error {
 	if r.Method != http.MethodPost {
 		w.WriteHeader(http.StatusMethodNotAllowed)
-		return &http.ProtocolError{ErrorString: "Method Not Allowed"}
+		return nil
 	}
 
 	list := TodoList{}
